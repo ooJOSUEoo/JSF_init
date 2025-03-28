@@ -12,7 +12,7 @@
 
 <h:body>
     <div class="ui-container mt-4">
-        <h:form>
+        <h:form id="formProductos">
             <div class="ui-card">
                 <div class="ui-card-header">Nuevo Producto</div>
                 <div class="ui-card-body">
@@ -28,20 +28,27 @@
                         </p:inputText>
                     </div>
 
-                    <p:commandButton value="Guardar" action="#{productoBean.guardar}"
+                    <p:commandButton id="btnGuardar" value="Guardar" action="#{productoBean.guardar}"
                                      styleClass="ui-button ui-button-primary"
                                      update="tableProductos"/>
                 </div>
             </div>
+            <p:blockUI block="formProductos" trigger="btnGuardar">
+                Cargando...
+                <p:progressBar id="progressBar" style="margin-top: 10px" mode="indeterminate" />
+            </p:blockUI>
         </h:form>
 
+
         <div style="margin-top: 10px">
-            <p:commandButton value="PDF">
-                <p:dataExporter target="tableProductos" type="pdf" fileName="productos"/>
-            </p:commandButton >
-            <p:commandButton value="Excel">
-                <p:dataExporter target="tableProductos" type="xlsx" fileName="productos"/>
-            </p:commandButton >
+            <div style="width: 300px; display: flex; justify-content: space-between">
+                <p:commandButton value="PDF" icon="pi pi-file-pdf" styleClass="ui-button ui-button-danger">
+                    <p:dataExporter target="tableProductos" type="pdf" fileName="productos"/>
+                </p:commandButton >
+                <p:commandButton value="Excel" icon="pi pi-file-excel" styleClass="ui-button ui-button-success">
+                    <p:dataExporter target="tableProductos" type="xlsx" fileName="productos"/>
+                </p:commandButton >
+            </div>
 
             <p:dataTable id="tableProductos" value="#{productoBean.productos}" var="producto"
                          styleClass="ui-datatable ui-widget"
