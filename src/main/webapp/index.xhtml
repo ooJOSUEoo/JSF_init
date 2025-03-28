@@ -7,7 +7,7 @@
 <h:head>
     <title>CRUD Productos</title>
     <!-- Agregar el CSS de PrimeFaces -->
-    <h:outputStylesheet name="primefaces.css"/>
+<!--    <h:outputStylesheet name="primefaces.css"/>-->
 </h:head>
 
 <h:body>
@@ -35,41 +35,48 @@
             </div>
         </h:form>
 
-        <p:dataTable id="tableProductos" value="#{productoBean.productos}" var="producto"
-                     styleClass="ui-datatable ui-widget"
-                     paginator="true" rows="5"
-                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-                     emptyMessage="No hay productos registrados"
-                     rowsPerPageTemplate="5,10,15">
-            <p:column>
-                <f:facet name="header">ID</f:facet>
-                #{producto.id}
-            </p:column>
-            <p:column>
-                <f:facet name="header">Nombre</f:facet>
-                #{producto.nombre}
-            </p:column>
-            <p:column>
-                <f:facet name="header">Precio</f:facet>
-                <h:outputText value="#{producto.precio}">
-                    <f:convertNumber type="currency" currencySymbol="$"/>
-                </h:outputText>
-            </p:column>
-            <p:column>
-                <f:facet name="header">Acciones</f:facet>
-                <h:form>
-                    <h:commandLink action="#{productoBean.cargarProducto(producto)}"
-                                   styleClass="ui-button ui-button-warning ui-button-sm">
-                        Editar
-                    </h:commandLink>
-                    <h:commandLink action="#{productoBean.eliminar(producto.id)}"
-                                   styleClass="ui-button ui-button-danger ui-button-sm ms-2"
-                                   immediate="true">
-                        Eliminar
-                    </h:commandLink>
-                </h:form>
-            </p:column>
-        </p:dataTable>
+        <div style="margin-top: 10px">
+            <p:commandButton value="PDF">
+                <p:dataExporter target="tableProductos" type="pdf" fileName="productos"/>
+            </p:commandButton >
+            <p:commandButton value="Excel">
+                <p:dataExporter target="tableProductos" type="xlsx" fileName="productos"/>
+            </p:commandButton >
+
+            <p:dataTable id="tableProductos" value="#{productoBean.productos}" var="producto"
+                         styleClass="ui-datatable ui-widget"
+                         paginator="true" rows="5"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                         emptyMessage="No hay productos registrados"
+                         rowsPerPageTemplate="5,10,15">
+                <p:column headerText="ID">
+                    <h:outputText value="#{producto.id}" />
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{producto.nombre}" />
+                </p:column>
+
+                <p:column headerText="Precio">
+                    <h:outputText value="#{producto.precio}">
+                        <f:convertNumber type="currency" currencySymbol="$"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Acciones" exportable="false">
+                    <h:form>
+                        <h:commandLink action="#{productoBean.cargarProducto(producto)}"
+                                       styleClass="ui-button ui-button-warning ui-button-sm">
+                            Editar
+                        </h:commandLink>
+                        <h:commandLink action="#{productoBean.eliminar(producto.id)}"
+                                       styleClass="ui-button ui-button-danger ui-button-sm ms-2"
+                                       immediate="true">
+                            Eliminar
+                        </h:commandLink>
+                    </h:form>
+                </p:column>
+            </p:dataTable>
+        </div>
     </div>
 </h:body>
 </html>

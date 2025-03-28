@@ -13,7 +13,6 @@ import java.util.List;
 @Named
 @ViewScoped
 public class ProductoBean implements Serializable {
-    private long id = 0;
     private Producto producto = new Producto();
     private List<Producto> productos;
 
@@ -26,15 +25,14 @@ public class ProductoBean implements Serializable {
     }
 
     public void guardar() {
-        System.out.println("ID: " + id);
-        System.out.println("ID producto: " + producto.getId());
-//        if(id == 0) {
-//            productoDAO.crear(producto);
-//        } else {
-//            productoDAO.actualizar(producto);
-//        }
-//        producto = new Producto();
-//        productos = productoDAO.listarTodos();
+        if(producto.getId() == null) {
+            productoDAO.crear(producto);
+            notificarPush();
+        } else {
+            productoDAO.actualizar(producto);
+        }
+        producto = new Producto();
+        productos = productoDAO.listarTodos();
     }
 
     public void eliminar(Long id) {  // <-- Añade parámetro
@@ -46,8 +44,14 @@ public class ProductoBean implements Serializable {
 
     public void cargarProducto(Producto producto) {
         this.producto = producto;
-        this.id = producto.getId();
-        System.out.println("Producto cargado - ID: " + this.id);
+    }
+
+    public void notificarPush() {
+        String summary = "Producto agregado";
+        String message = "Se ha agregado un nuevo producto: " + producto.getNombre();
+        String CHANNEL = "/notify";
+
+
     }
 
     // Getters y Setters
