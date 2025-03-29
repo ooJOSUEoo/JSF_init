@@ -14,6 +14,7 @@
     <div class="ui-container mt-4">
 
         <h:form id="form" enctype="multipart/form-data">
+            <p:growl id="msj" showDetail="true" severity="info, fatal" showSummary="true"/>
             <p:fieldset legend="Datos personales">
                 <p:panelGrid id="panelDatos" columns="2" layout="grid" styleClass="ui-panelgrid-blank">
                     <p:outputLabel for="nombre" value="Nombre:" styleClass="ui-label"/>
@@ -39,6 +40,14 @@
             </p:fieldset>
             <p:fieldset legend="Datos de usuario">
                 <p:panelGrid id="panelUsuario" columns="2" layout="grid" styleClass="ui-panelgrid-blank">
+                    <p:outputLabel for="tipo" value="Tipo:" styleClass="ui-label"/>
+                    <p:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}" styleClass="ui-inputtext"
+                                     required="true">
+                        <f:selectItem itemLabel="Administrador" itemValue="A"/>
+                        <f:selectItem itemLabel="Operador" itemValue="O"/>
+                    </p:selectOneMenu>
+                    <p:message for="tipo"/>
+
                     <p:outputLabel for="usuario" value="Usuario:" styleClass="ui-label"/>
                     <p:inputText id="usuario" value="#{usuarioBean.usuario.usuario}" styleClass="ui-inputtext"
                                  required="true"/>

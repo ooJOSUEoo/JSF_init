@@ -5,6 +5,8 @@ import dao.UsuarioDAO;
 import entities.Persona;
 import entities.Usuario;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -38,9 +40,25 @@ public class UsuarioBean implements Serializable {
         if(usuario.getId() == null && persona.getId() == null) {
             idu = usuarioDAO.crear(usuario);
             idp = personaDAO.crear(persona);
+            FacesContext.getCurrentInstance().addMessage(
+                    null,
+                    new FacesMessage
+                            (FacesMessage.SEVERITY_INFO,
+                            "Aviso",
+                                    "Se ha guardado el usuario y persona con ID: " + idu
+                            )
+            );
         } else {
             idu = usuarioDAO.actualizar(usuario);
             idp = personaDAO.actualizar(persona);
+            FacesContext.getCurrentInstance().addMessage(
+                    null,
+                    new FacesMessage
+                            (FacesMessage.SEVERITY_INFO,
+                                    "Aviso",
+                                    "Se ha actualizado el usuario y persona con ID: " + idu
+                            )
+            );
         }
         usuario = new Usuario();
         persona = new Persona();
