@@ -58,9 +58,9 @@ public class CategoriaDAO implements Serializable {
         if (id == null) {
             throw new IllegalArgumentException("ID no puede ser nulo");
         }
-        Categoria categoia = em.find(Categoria.class, id);
-        if (categoia != null) {
-            ejecutarTransaccion(() -> em.remove(categoia));
+        Categoria categoria = em.find(Categoria.class, id);
+        if (categoria != null) {
+            ejecutarTransaccion(() -> em.remove(categoria));
         } else {
             LOG.warning("Categoria no encontrada con ID: " + id);
         }

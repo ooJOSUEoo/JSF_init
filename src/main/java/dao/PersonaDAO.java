@@ -1,6 +1,6 @@
 package dao;
 
-import entities.Categoria;
+import entities.Persona;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -10,12 +10,12 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class CategoriaDAO implements Serializable {
-    private static final Logger LOG = Logger.getLogger(CategoriaDAO.class.getName());
+public class PersonaDAO implements Serializable {
+    private static final Logger LOG = Logger.getLogger(PersonaDAO.class.getName());
     private EntityManagerFactory emf;
     private EntityManager em;
 
-    public CategoriaDAO() {
+    public PersonaDAO() {
         this.emf = Persistence.createEntityManagerFactory("miUnidadPersistencia");
         this.em = emf.createEntityManager();
     }
@@ -34,35 +34,34 @@ public class CategoriaDAO implements Serializable {
         }
     }
 
-    public Long crear(Categoria categoria) {
-        categoria.setEstado(true);
-        ejecutarTransaccion(() -> em.persist(categoria));
-        return categoria.getId();
+    public Long crear(Persona persona) {
+        ejecutarTransaccion(() -> em.persist(persona));
+        return persona.getId();
     }
 
-    public Categoria buscarPorId(Long id) {
-        return em.find(Categoria.class, id);
+    public Persona buscarPorId(Long id) {
+        return em.find(Persona.class, id);
     }
 
-    public List<Categoria> listarTodos() {
-        return em.createQuery("SELECT p FROM Categoria p", Categoria.class).getResultList();
+    public List<Persona> listarTodos() {
+        return em.createQuery("SELECT p FROM Persona p", Persona.class).getResultList();
     }
 
-    public Long actualizar(Categoria categoria) {
-        ejecutarTransaccion(() -> em.merge(categoria));
-        return categoria.getId();
+    public Long actualizar(Persona persona) {
+        ejecutarTransaccion(() -> em.merge(persona));
+        return persona.getId();
     }
 
     public void eliminar(Long id) {
-        LOG.info("Intentando eliminar categoria con ID: " + id);
+        LOG.info("Intentando eliminar persona con ID: " + id);
         if (id == null) {
             throw new IllegalArgumentException("ID no puede ser nulo");
         }
-        Categoria categoia = em.find(Categoria.class, id);
-        if (categoia != null) {
-            ejecutarTransaccion(() -> em.remove(categoia));
+        Persona persona = em.find(Persona.class, id);
+        if (persona != null) {
+            ejecutarTransaccion(() -> em.remove(persona));
         } else {
-            LOG.warning("Categoria no encontrada con ID: " + id);
+            LOG.warning("Persona no encontrada con ID: " + id);
         }
     }
 
