@@ -37,10 +37,30 @@
                     </p:submenu>
                     <p:menuitem value="Salir" icon="pi pi-sign-out"/>
                 </p:menubar>
-                <p:dock>
+                <p:dock position="top">
                     <p:menuitem value="Crear" icon="https://lh3.googleusercontent.com/ogw/AF2bZyggUcfWKA7apQAfsHoNSwrWtG8E0uluvJS6MYzc5AnBayo=s32-c-mo"/>
                     <p:menuitem value="Listar" icon="https://lh3.googleusercontent.com/ogw/AF2bZyggUcfWKA7apQAfsHoNSwrWtG8E0uluvJS6MYzc5AnBayo=s32-c-mo"/>
                 </p:dock>
+            </h:form>
+        </div>
+
+        <div>
+            <h:form>
+                <p:commandButton value="Ver dialog" onclick="PF('dlg').show()" />
+                <p:dialog id="dlg" widgetVar="dlg" header="Dialog header"
+                          closeOnEscape="true"
+                          hideEffect="explode"
+                          closable="false">
+                    <h:outputText value="Dialog content"/>
+                    <p:commandButton value="Close" onclick="PF('dlg').hide()" />
+                </p:dialog>
+
+                <p:commandButton value="Ver comfirm" onclick="PF('dlg2').show()" />
+                <p:confirmDialog id="dlg2" widgetVar="dlg2" message="Are you sure?"
+                                 header="Confirmation" severity="warn">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" onclick="PF('dlg2').hide()"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" onclick="PF('dlg2').hide()"/>
+                </p:confirmDialog>
             </h:form>
         </div>
 
