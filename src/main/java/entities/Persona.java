@@ -20,6 +20,10 @@ public class Persona {
     @Column
     private Date fechaNacimiento;
 
+    @OneToOne
+    @JoinColumn(name = "id", nullable = false)
+    private Usuario usuario;
+
     // Getters y Setters
 
     public Long getId() {
@@ -52,5 +56,13 @@ public class Persona {
 
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
