@@ -2,11 +2,10 @@ package entities;
 
 import jakarta.persistence.*;
 
-import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-public class Persona {
+public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,11 +14,7 @@ public class Persona {
     private String nombre;
 
     @Column
-    private Character sexo;
-
-    @Temporal(TemporalType.DATE)
-    @Column
-    private Date fechaNacimiento;
+    private Boolean estado;
 
     // Getters y Setters
 
@@ -39,38 +34,23 @@ public class Persona {
         this.nombre = nombre;
     }
 
-    public Character getSexo() {
-        return sexo;
+    public Boolean getEstado() {
+        return estado;
     }
 
-    public void setSexo(Character sexo) {
-        this.sexo = sexo;
-    }
-
-    public Date getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public void setFechaNacimiento(Date fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
+    public void setEstado(Boolean estado) {
+        this.estado = estado;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Persona persona = (Persona) o;
-        return Objects.equals(id, persona.id);
+        Categoria categoria = (Categoria) o;
+        return Objects.equals(id, categoria.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Persona{" +
-                "id=" + id +
-                '}';
     }
 }

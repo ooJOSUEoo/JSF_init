@@ -11,6 +11,7 @@
         <class>entities.Categoria</class>
         <class>entities.Persona</class>
         <class>entities.Usuario</class>
+        <class>entities.Nota</class>
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/testdb"/>

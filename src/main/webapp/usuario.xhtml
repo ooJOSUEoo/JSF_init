@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Usuario</title>
+    <!-- Agregar el CSS de PrimeFaces -->
+    <!--    <h:outputStylesheet name="primefaces.css"/>-->
+</h:head>
+
+<h:body>
+    <div class="ui-container mt-4">
+
+        <h:form id="form" enctype="multipart/form-data">
+            <p:fieldset legend="Datos personales">
+                <p:panelGrid id="panelDatos" columns="2" layout="grid" styleClass="ui-panelgrid-blank">
+                    <p:outputLabel for="nombre" value="Nombre:" styleClass="ui-label"/>
+                    <p:inputText id="nombre" value="#{usuarioBean.persona.nombre}" styleClass="ui-inputtext"
+                                 required="true"/>
+                    <p:message for="nombre"/>
+
+                    <p:outputLabel for="sexo" value="Sexo:" styleClass="ui-label"/>
+                    <p:selectOneRadio id="sexo" value="#{usuarioBean.persona.sexo}" styleClass="ui-radiobutton"
+                                      required="true">
+                        <f:selectItem itemLabel="Masculino" itemValue="M"/>
+                        <f:selectItem itemLabel="Femenino" itemValue="F"/>
+                    </p:selectOneRadio>
+                    <p:message for="sexo"/>
+
+                    <p:outputLabel for="fechaNacimiento" value="Fecha de nacimiento:" styleClass="ui-label"/>
+                    <p:datePicker id="fechaNacimiento" value="#{usuarioBean.persona.fechaNacimiento}"
+                                  styleClass="ui-inputtext"
+                                  required="true"/>
+                    <p:message for="fechaNacimiento"/>
+
+                </p:panelGrid>
+            </p:fieldset>
+            <p:fieldset legend="Datos de usuario">
+                <p:panelGrid id="panelUsuario" columns="2" layout="grid" styleClass="ui-panelgrid-blank">
+                    <p:outputLabel for="usuario" value="Usuario:" styleClass="ui-label"/>
+                    <p:inputText id="usuario" value="#{usuarioBean.usuario.usuario}" styleClass="ui-inputtext"
+                                 required="true"/>
+                    <p:message for="usuario"/>
+
+                    <p:outputLabel for="password" value="Password:" styleClass="ui-label"/>
+                    <p:password id="password" value="#{usuarioBean.usuario.password}" styleClass="ui-inputtext"
+                                match="repetirPassword"
+                                validatorMessage="Las contraseñas no coinciden"
+                                weakLabel="Débil"
+                                strongLabel="Fuerte"
+                                goodLabel="Buena"
+                                promptLabel="Ingrese la contraseña"
+                                feedback="true"
+                                required="true"/>
+                    <p:message for="password"/>
+
+                    <p:outputLabel for="repetirPassword" value="Repetir password:" styleClass="ui-label"/>
+                    <p:password id="repetirPassword" styleClass="ui-inputtext" required="true"/>
+                    <p:message for="repetirPassword"/>
+                </p:panelGrid>
+            </p:fieldset>
+            <p:commandButton id="btnGuardar" icon="pi pi-save" value="Guardar" action="#{usuarioBean.guardar}"
+                             styleClass="ui-button ui-button-primary" update="panelDatos panelUsuario"/>
+            <p:blockUI block="form" trigger="btnGuardar">
+                Cargando...
+                <p:progressBar id="progressBar" style="margin-top: 10px" mode="indeterminate" />
+            </p:blockUI>
+        </h:form>
+
+    </div>
+</h:body>
+</html>
