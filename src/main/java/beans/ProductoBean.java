@@ -1,20 +1,23 @@
 package beans;
 
+import com.google.gson.Gson;
 import dao.ProductoDAO;
 import entities.Producto;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
+import org.primefaces.convert.BigDecimalConverter;
+import org.primefaces.model.charts.pie.PieChartDataSet;
+import org.primefaces.model.charts.pie.PieChartModel;
 import org.primefaces.model.file.UploadedFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.awt.*;
 import java.io.Serializable;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Named
 @ViewScoped
@@ -22,6 +25,7 @@ public class ProductoBean implements Serializable {
     private Producto producto = new Producto();
     private UploadedFile imagen;
     private List<Producto> productos;
+    private String chartModel;
 
     @Inject
     private ProductoDAO productoDAO;
@@ -35,6 +39,7 @@ public class ProductoBean implements Serializable {
             }
         }
         productos = p;
+        generarGrafico();
     }
 
     public void guardar() {
@@ -54,12 +59,14 @@ public class ProductoBean implements Serializable {
             }
         }
         productos = p;
+        generarGrafico();
     }
 
     public void eliminar(Long id) {  // <-- Añade parámetro
         if (id != null) {
             productoDAO.eliminar(id);
             productos = productoDAO.listarTodos();
+            generarGrafico();
         }
     }
 
@@ -79,7 +86,46 @@ public class ProductoBean implements Serializable {
             e.printStackTrace();
         }
     }
+
+    public void generarGrafico() {
+        String type = "pie";
+        Map<String, Boolean> options = Map.of(
+                "responsive", true,
+                "maintainAspectRatio", false
+        );
+        Map<String, Object> data = Map.of(
+                "labels", productos.stream().map(Producto::getNombre).collect(Collectors.toList()),
+                "datasets", List.of(Map.of(
+                        "data", productos.stream().map(Producto::getPrecio).collect(Collectors.toList()),
+                        "backgroundColor", productos.stream().map(p -> {
+                            Color c = new Color((int) (Math.random() * 255),
+                                    (int) (Math.random() * 255),
+                                    (int) (Math.random() * 255));
+                            // Convertir el Color a formato CSS rgba
+                            return "rgba(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ",0.2)";
+                        }).collect(Collectors.toList()),
+                        "borderColor", productos.stream().map(p -> {
+                            Color c = new Color((int) (Math.random() * 255),
+                                    (int) (Math.random() * 255),
+                                    (int) (Math.random() * 255));
+                            return "rgba(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ",1)";
+                        }).collect(Collectors.toList()),
+                        "borderWidth", 1
+                ))
+        );
+
+        Map<String, Object> chartConfig = Map.of(
+                "type", type,
+                "data", data,
+                "options", options
+        );
+
+        Gson gson = new Gson();
+        chartModel = gson.toJson(chartConfig);
+    }
+
     // Getters y Setters
+
 
     public Producto getProducto() {
         return producto;
@@ -103,6 +149,14 @@ public class ProductoBean implements Serializable {
 
     public void setProductos(List<Producto> productos) {
         this.productos = productos;
+    }
+
+    public String getChartModel() {
+        return chartModel;
+    }
+
+    public void setChartModel(String pieChartModel) {
+        this.chartModel = pieChartModel;
     }
 
     public ProductoDAO getProductoDAO() {

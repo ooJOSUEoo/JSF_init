@@ -45,6 +45,44 @@
         </div>
 
         <div>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+            <script>
+                function chartExtender() {
+                    var options = {
+                        plugins: [ChartDataLabels],
+                        options: {
+                            plugins: {
+                                // Change options for ALL labels of THIS CHART
+                                datalabels: {
+                                    color: 'HotPink'
+                                }
+                            }
+                        },
+                        data: {
+                            datasets: [{
+                                // Change options only for labels of THIS DATASET
+                                datalabels: {
+                                    color: 'Indigo'
+                                }
+                            }]
+                        }
+                    };
+
+                    //merge all options into the main chart options
+                    $.extend(true, this.cfg.config, options);
+                }
+            </script>
+            <div class="grid">
+                <p:commandButton value="Actualizar" action="#{productoBean.generarGrafico()}" update="chart"/>
+                <div class="col-12 lg:col-6 xl:col-4">
+                    <div class="card">
+                        <p:chart id="chart" value="#{productoBean.chartModel}" extender="chartExtender" style="width: 100%; height: 300px"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
             <h:form>
                 <p:commandButton value="Ver dialog" onclick="PF('dlg').show()" />
                 <p:dialog id="dlg" widgetVar="dlg" header="Dialog header"
