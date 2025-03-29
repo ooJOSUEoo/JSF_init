@@ -12,6 +12,38 @@
 
 <h:body>
     <div class="ui-container mt-4">
+        <div>
+            Menu
+            <h:form>
+                <p:menu>
+                    <p:submenu label="Productos">
+                        <p:menuitem value="Crear" icon="pi pi-plus"/>
+                        <p:menuitem value="Listar" icon="pi pi-list"/>
+                    </p:submenu>
+                    <p:submenu label="Categorias">
+                        <p:menuitem value="Crear" icon="pi pi-plus"/>
+                        <p:menuitem value="Listar" icon="pi pi-list"/>
+                    </p:submenu>
+                </p:menu>
+                MenuBar
+                <p:menubar>
+                    <p:submenu label="Productos">
+                        <p:menuitem value="Crear" icon="pi pi-plus"/>
+                        <p:menuitem value="Listar" icon="pi pi-list"/>
+                    </p:submenu>
+                    <p:submenu label="Categorias">
+                        <p:menuitem value="Crear" icon="pi pi-plus"/>
+                        <p:menuitem value="Listar" icon="pi pi-list"/>
+                    </p:submenu>
+                    <p:menuitem value="Salir" icon="pi pi-sign-out"/>
+                </p:menubar>
+                <p:dock>
+                    <p:menuitem value="Crear" icon="https://lh3.googleusercontent.com/ogw/AF2bZyggUcfWKA7apQAfsHoNSwrWtG8E0uluvJS6MYzc5AnBayo=s32-c-mo"/>
+                    <p:menuitem value="Listar" icon="https://lh3.googleusercontent.com/ogw/AF2bZyggUcfWKA7apQAfsHoNSwrWtG8E0uluvJS6MYzc5AnBayo=s32-c-mo"/>
+                </p:dock>
+            </h:form>
+        </div>
+
         <h:form id="formProductos" enctype="multipart/form-data">
             <p:growl id="msj" showDetail="true"/>
             <div class="ui-card">
