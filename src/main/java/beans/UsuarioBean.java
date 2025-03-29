@@ -42,7 +42,7 @@ public class UsuarioBean implements Serializable {
         }
     }
 
-    public void cargarPersona(Usuario usuario) {
+    public void cargarUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 

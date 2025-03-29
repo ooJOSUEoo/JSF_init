@@ -21,7 +21,7 @@ public class Persona {
     private Date fechaNacimiento;
 
     @OneToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
     // Getters y Setters
