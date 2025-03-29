@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>CRUD Productos</title>
+    <!-- Agregar el CSS de PrimeFaces -->
+    <!--    <h:outputStylesheet name="primefaces.css"/>-->
+</h:head>
+
+<h:body>
+    <div class="ui-container mt-4">
+
+        <h:form id="formProductos" enctype="multipart/form-data">
+            <p:growl id="msj" showDetail="true"/>
+            <div class="ui-card">
+                <div class="ui-card-header">Categorias</div>
+                <div class="ui-card-body">
+                    <div class="ui-field">
+                        <p:outputLabel for="nombre" value="Nombre:" styleClass="ui-label"/>
+                        <p:inputText id="nombre" value="#{categoriaBean.categoria.nombre}" styleClass="ui-inputtext"/>
+                    </div>
+
+
+                    <h:commandButton id="btnGuardar" value="Guardar" action="#{categoriaBean.guardar}"
+                                     styleClass="ui-button ui-button-primary"
+                                     update="table"/>
+                </div>
+            </div>
+            <p:blockUI block="formProductos" trigger="btnGuardar">
+                Cargando...
+                <p:progressBar id="progressBar" style="margin-top: 10px" mode="indeterminate" />
+            </p:blockUI>
+        </h:form>
+
+
+        <div style="margin-top: 10px">
+            <p:dataTable id="table" value="#{categoriaBean.categorias}" var="categoria"
+                         styleClass="ui-datatable ui-widget"
+                         paginator="true" rows="5"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                         emptyMessage="No hay categorias registrados"
+                         rowsPerPageTemplate="5,10,15">
+                <p:column headerText="ID">
+                    <h:outputText value="#{categoria.id}" />
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{categoria.nombre}" />
+                </p:column>
+
+                <p:column headerText="Estado">
+                    <h:outputText value="#{categoria.estado}"/>
+                </p:column>
+
+                <p:column headerText="Acciones" exportable="false">
+                    <h:form>
+                        <h:commandLink action="#{categoriaBean.cargarCategoria(categoria)}"
+                                       styleClass="ui-button ui-button-warning ui-button-sm">
+                            Editar
+                        </h:commandLink>
+                        <h:commandLink action="#{categoriaBean.eliminar(categoria.id)}"
+                                       styleClass="ui-button ui-button-danger ui-button-sm ms-2"
+                                       immediate="true">
+                            Eliminar
+                        </h:commandLink>
+                    </h:form>
+                </p:column>
+            </p:dataTable>
+        </div>
+    </div>
+</h:body>
+</html>
