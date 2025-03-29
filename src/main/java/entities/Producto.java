@@ -16,6 +16,13 @@ public class Producto {
     @Column
     private Double precio;
 
+    @Column
+    private byte[] imagen;
+
+    @Lob
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String imagenb64;
+
     // Getters y Setters
     public Long getId() {
         return id;
@@ -39,5 +46,21 @@ public class Producto {
 
     public void setPrecio(Double precio) {
         this.precio = precio;
+    }
+
+    public byte[] getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getImagenb64() {
+        return imagenb64;
+    }
+
+    public void setImagenb64(String imagenb64) {
+        this.imagenb64 = imagenb64;
     }
 }

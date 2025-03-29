@@ -33,8 +33,9 @@ public class ProductoDAO implements Serializable {
         }
     }
 
-    public void crear(Producto producto) {
+    public Long crear(Producto producto) {
         ejecutarTransaccion(() -> em.persist(producto));
+        return producto.getId();
     }
 
     public Producto buscarPorId(Long id) {
@@ -45,8 +46,9 @@ public class ProductoDAO implements Serializable {
         return em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
     }
 
-    public void actualizar(Producto producto) {
+    public Long actualizar(Producto producto) {
         ejecutarTransaccion(() -> em.merge(producto));
+        return producto.getId();
     }
 
     public void eliminar(Long id) {
@@ -57,6 +59,16 @@ public class ProductoDAO implements Serializable {
         Producto producto = em.find(Producto.class, id);
         if (producto != null) {
             ejecutarTransaccion(() -> em.remove(producto));
+        } else {
+            LOG.warning("Producto no encontrado con ID: " + id);
+        }
+    }
+
+    public void subirImagen(Long id, byte[] imagen) {
+        Producto producto = em.find(Producto.class, id);
+        if (producto != null) {
+            producto.setImagen(imagen);
+            ejecutarTransaccion(() -> em.merge(producto));
         } else {
             LOG.warning("Producto no encontrado con ID: " + id);
         }

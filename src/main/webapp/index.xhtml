@@ -12,7 +12,8 @@
 
 <h:body>
     <div class="ui-container mt-4">
-        <h:form id="formProductos">
+        <h:form id="formProductos" enctype="multipart/form-data">
+            <p:growl id="msj" showDetail="true"/>
             <div class="ui-card">
                 <div class="ui-card-header">Nuevo Producto</div>
                 <div class="ui-card-body">
@@ -28,7 +29,17 @@
                         </p:inputText>
                     </div>
 
-                    <p:commandButton id="btnGuardar" value="Guardar" action="#{productoBean.guardar}"
+                    <div class="ui-field">
+                        <p:outputLabel for="imagen" value="Imagen:" styleClass="ui-label"/>
+                        <p:fileUpload id="imagen" mode="simple"
+                                      value="#{productoBean.imagen}"
+                                      allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                      sizeLimit="5242880"
+                                      update="msj"/>
+                        <p:graphicImage value="#{productoBean.imagen}"/>
+                    </div>
+
+                    <h:commandButton id="btnGuardar" value="Guardar" action="#{productoBean.guardar}"
                                      styleClass="ui-button ui-button-primary"
                                      update="tableProductos"/>
                 </div>
@@ -68,6 +79,10 @@
                     <h:outputText value="#{producto.precio}">
                         <f:convertNumber type="currency" currencySymbol="$"/>
                     </h:outputText>
+                </p:column>
+
+                <p:column headerText="Imagen">
+                    <h:graphicImage value="#{producto.imagenb64}" width="70"/>
                 </p:column>
                 <p:column headerText="Acciones" exportable="false">
                     <h:form>

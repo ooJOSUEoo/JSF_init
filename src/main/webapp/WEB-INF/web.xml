@@ -12,6 +12,14 @@
         <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+<!--    <filter>-->
+<!--        <filter-name>PrimeFaces FileUpload Filter</filter-name>-->
+<!--        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>PrimeFaces FileUpload Filter</filter-name>-->
+<!--        <servlet-name>Faces Servlet</servlet-name>-->
+<!--    </filter-mapping>-->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
