@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+
+<h:body>
+    <ui:decorate template="../templates/layout.xhtml"
+                 xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html">
+
+        <ui:define name="contenido">
+
+            <div>
+                <p:link value="Categorias" outcome="categorias.xhtml" />
+            </div>
+
+            <p:separator/>
+
+            <div>
+                Menu
+                <h:form>
+                    <p:menu>
+                        <p:submenu label="Productos">
+                            <p:menuitem value="Crear" icon="pi pi-plus"/>
+                            <p:menuitem value="Listar" icon="pi pi-list"/>
+                        </p:submenu>
+                        <p:submenu label="Categorias">
+                            <p:menuitem value="Crear" icon="pi pi-plus"/>
+                            <p:menuitem value="Listar" icon="pi pi-list"/>
+                        </p:submenu>
+                    </p:menu>
+<!--                    MenuBar-->
+<!--                    <p:menubar>-->
+<!--                        <p:submenu label="Productos">-->
+<!--                            <p:menuitem value="Crear" icon="pi pi-plus"/>-->
+<!--                            <p:menuitem value="Listar" icon="pi pi-list"/>-->
+<!--                        </p:submenu>-->
+<!--                        <p:submenu label="Categorias">-->
+<!--                            <p:menuitem value="Crear" icon="pi pi-plus"/>-->
+<!--                            <p:menuitem value="Listar" icon="pi pi-list"/>-->
+<!--                        </p:submenu>-->
+<!--                        <p:menuitem value="Salir" icon="pi pi-sign-out"/>-->
+<!--                    </p:menubar>-->
+                    <p:dock position="top">
+                        <p:menuitem value="Crear" icon="https://lh3.googleusercontent.com/ogw/AF2bZyggUcfWKA7apQAfsHoNSwrWtG8E0uluvJS6MYzc5AnBayo=s32-c-mo"/>
+                        <p:menuitem value="Listar" icon="https://lh3.googleusercontent.com/ogw/AF2bZyggUcfWKA7apQAfsHoNSwrWtG8E0uluvJS6MYzc5AnBayo=s32-c-mo"/>
+                    </p:dock>
+                </h:form>
+            </div>
+
+            <div>
+                <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+                <script>
+                    function chartExtender() {
+                        var options = {
+                            plugins: [ChartDataLabels],
+                            options: {
+                                plugins: {
+                                    // Change options for ALL labels of THIS CHART
+                                    datalabels: {
+                                        color: 'HotPink'
+                                    }
+                                }
+                            },
+                            data: {
+                                datasets: [{
+                                    // Change options only for labels of THIS DATASET
+                                    datalabels: {
+                                        color: 'Indigo'
+                                    }
+                                }]
+                            }
+                        };
+
+                        //merge all options into the main chart options
+                        $.extend(true, this.cfg.config, options);
+                    }
+                </script>
+                <div class="grid">
+                    <p:commandButton value="Actualizar" action="#{productoBean.generarGrafico()}" update="chart"/>
+                    <div class="col-12 lg:col-6 xl:col-4">
+                        <div class="card">
+                            <p:chart id="chart" value="#{productoBean.chartModel}" extender="chartExtender" style="width: 100%; height: 300px"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h:form>
+                    <p:commandButton value="Ver dialog" onclick="PF('dlg').show()" />
+                    <p:dialog id="dlg" widgetVar="dlg" header="Dialog header"
+                              closeOnEscape="true"
+                              hideEffect="explode"
+                              closable="false">
+                        <h:outputText value="Dialog content"/>
+                        <p:commandButton value="Close" onclick="PF('dlg').hide()" />
+                    </p:dialog>
+
+                    <p:commandButton value="Ver comfirm" onclick="PF('dlg2').show()" />
+                    <p:confirmDialog id="dlg2" widgetVar="dlg2" message="Are you sure?"
+                                     header="Confirmation" severity="warn">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" onclick="PF('dlg2').hide()"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" onclick="PF('dlg2').hide()"/>
+                    </p:confirmDialog>
+                </h:form>
+            </div>
+
+            <h:form id="formProductos" enctype="multipart/form-data">
+                <p:growl id="msj" showDetail="true"/>
+                <div class="ui-card">
+                    <div class="ui-card-header">Nuevo Producto</div>
+                    <div class="ui-card-body">
+                        <div class="ui-field">
+                            <p:outputLabel for="nombre" value="Nombre:" styleClass="ui-label"/>
+                            <p:inputText id="nombre" value="#{productoBean.producto.nombre}" styleClass="ui-inputtext"/>
+                        </div>
+
+                        <div class="ui-field">
+                            <p:outputLabel for="precio" value="Precio:" styleClass="ui-label"/>
+                            <p:inputText id="precio" value="#{productoBean.producto.precio}" styleClass="ui-inputtext">
+                                <f:convertNumber type="number" maxFractionDigits="2" currencySymbol="$"/>
+                            </p:inputText>
+                        </div>
+
+                        <div class="ui-field">
+                            <p:outputLabel for="imagen" value="Imagen:" styleClass="ui-label"/>
+                            <p:fileUpload id="imagen" mode="simple"
+                                          value="#{productoBean.imagen}"
+                                          allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                          sizeLimit="5242880"
+                                          update="msj"/>
+                            <p:graphicImage value="#{productoBean.imagen}"/>
+                        </div>
+
+                        <h:commandButton id="btnGuardar" value="Guardar" action="#{productoBean.guardar}"
+                                         styleClass="ui-button ui-button-primary"
+                                         update="tableProductos"/>
+                    </div>
+                </div>
+                <p:blockUI block="formProductos" trigger="btnGuardar">
+                    Cargando...
+                    <p:progressBar id="progressBar" style="margin-top: 10px" mode="indeterminate" />
+                </p:blockUI>
+            </h:form>
+
+            <div style="margin-top: 10px">
+                <div style="width: 300px; display: flex; justify-content: space-between">
+                    <p:commandButton value="PDF" icon="pi pi-file-pdf" styleClass="ui-button ui-button-danger">
+                        <p:dataExporter target="tableProductos" type="pdf" fileName="productos"/>
+                    </p:commandButton >
+                    <p:commandButton value="Excel" icon="pi pi-file-excel" styleClass="ui-button ui-button-success">
+                        <p:dataExporter target="tableProductos" type="xlsx" fileName="productos"/>
+                    </p:commandButton >
+                </div>
+
+                <p:dataTable id="tableProductos" value="#{productoBean.productos}" var="producto"
+                             styleClass="ui-datatable ui-widget"
+                             paginator="true" rows="5"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                             emptyMessage="No hay productos registrados"
+                             rowsPerPageTemplate="5,10,15">
+                    <p:column headerText="ID">
+                        <h:outputText value="#{producto.id}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{producto.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Precio">
+                        <h:outputText value="#{producto.precio}">
+                            <f:convertNumber type="currency" currencySymbol="$"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Imagen">
+                        <h:graphicImage value="#{producto.imagenb64}" width="70"/>
+                    </p:column>
+                    <p:column headerText="Acciones" exportable="false">
+                        <h:form>
+                            <h:commandLink action="#{productoBean.cargarProducto(producto)}"
+                                           styleClass="ui-button ui-button-warning ui-button-sm">
+                                Editar
+                            </h:commandLink>
+                            <h:commandLink action="#{productoBean.eliminar(producto.id)}"
+                                           styleClass="ui-button ui-button-danger ui-button-sm ms-2"
+                                           immediate="true">
+                                Eliminar
+                            </h:commandLink>
+                        </h:form>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </ui:define>
+
+    </ui:decorate>
+</h:body>
+</html>

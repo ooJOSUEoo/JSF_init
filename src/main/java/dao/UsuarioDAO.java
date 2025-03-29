@@ -1,10 +1,7 @@
 package dao;
 
 import entities.Usuario;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -62,6 +59,26 @@ public class UsuarioDAO implements Serializable {
             ejecutarTransaccion(() -> em.remove(usuario));
         } else {
             LOG.warning("Usuario no encontrada con ID: " + id);
+        }
+    }
+
+    public Usuario iniciarSesion(Usuario u) {
+        Usuario usuario = null;
+        try {
+            Query query = em.createQuery("SELECT p FROM Usuario p WHERE p.usuario = :usuario AND p.password = :password", Usuario.class);
+            query.setParameter("usuario", u.getUsuario());
+            query.setParameter("password", u.getPassword());
+            List<Usuario> usuarios = query.getResultList();
+
+            if (!usuarios.isEmpty()) {
+                usuario = usuarios.get(0);
+            }
+
+            return usuario;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

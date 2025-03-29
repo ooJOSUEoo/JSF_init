@@ -5,22 +5,25 @@ import dao.UsuarioDAO;
 import entities.Persona;
 import entities.Usuario;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
 @Named
-@ViewScoped
+@SessionScoped
 public class UsuarioBean implements Serializable {
     private Usuario usuario = new Usuario();
     private Persona persona = new Persona();
     private List<Usuario> usuarios;
     private List<Persona> personas;
+    private Usuario sesion;
 
     @Inject
     private UsuarioDAO usuarioDAO;
@@ -83,6 +86,52 @@ public class UsuarioBean implements Serializable {
         this.persona = persona;
     }
 
+    public void iniciarSesion() throws IOException {
+        Usuario usuario = usuarioDAO.iniciarSesion(this.usuario);
+        if (usuario != null) {
+            System.out.println("Usuario encontrado: " + usuario);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuario);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/demo-1.0-SNAPSHOT/logged/main.xhtml");
+        }
+        FacesContext.getCurrentInstance().addMessage(
+                null,
+                new FacesMessage
+                        (FacesMessage.SEVERITY_INFO,
+                                "Aviso",
+                                "Credenciales incorrectas"
+                        )
+        );
+    }
+
+    public  void verificarSesion(Boolean logged) {
+        try{
+            FacesContext context = FacesContext.getCurrentInstance();
+            Usuario u = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
+            System.out.println("Usuario: " + u);
+            if (u == null) {
+                if (logged){
+                    context.getExternalContext().redirect("/demo-1.0-SNAPSHOT/index.xhtml");
+                }
+            }else{
+                if (!logged){
+                    context.getExternalContext().redirect("/demo-1.0-SNAPSHOT/logged/main.xhtml");
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void cerrarSesion() {
+        try {
+        FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().invalidateSession();
+            context.getExternalContext().redirect("/demo-1.0-SNAPSHOT/index.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Getters y Setters
 
@@ -132,5 +181,17 @@ public class UsuarioBean implements Serializable {
 
     public void setPersonaDAO(PersonaDAO personaDAO) {
         this.personaDAO = personaDAO;
+    }
+
+    public Usuario getSesion() {
+        try {
+            return (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void setSesion(Usuario sesion) {
+        this.sesion = sesion;
     }
 }
