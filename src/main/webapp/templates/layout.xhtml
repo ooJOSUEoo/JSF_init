@@ -18,8 +18,9 @@
             <h:form>
                 <p:menubar>
                     <p:menuitem value="App"/>
-                    <p:menuitem value="Home" outcome="/logged/main" icon="pi pi-home"/>
+                    <p:menuitem value="Home" outcome="/logged/index" icon="pi pi-home"/>
                     <p:menuitem value="Categorias" outcome="/logged/categorias" icon="pi pi-list"/>
+                    <p:menuitem value="Notas" outcome="/logged/notas" icon="pi pi-list"/>
                     <p:menuitem value="#{usuarioBean.sesion.usuario}"/>
                     <p:menuitem value="Salir" action="#{usuarioBean.cerrarSesion()}" icon="pi pi-sign-out"/>
                 </p:menubar>

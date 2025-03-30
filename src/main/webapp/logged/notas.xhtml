@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+
+<h:body>
+    <ui:decorate template="../templates/layout.xhtml"
+                 xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html">
+
+        <ui:define name="contenido">
+            #{usuarioBean.sesion.tipo == 'admin' ? 'Admin' : 'User'}
+            <h:form id="formProductos" enctype="multipart/form-data" rendered="#{usuarioBean.sesion.tipo == 'O'}">
+                <p:growl id="msj" showDetail="true"/>
+                <div class="ui-card">
+                    <div class="ui-card-header">Notas</div>
+                    <div class="ui-card-body">
+                        <p:panelGrid columns="2" class="ui-field">
+                            <p:outputLabel for="titulo" value="Titulo:" styleClass="ui-label"/>
+                            <p:inputText id="titulo" value="#{notaBean.nota.titulo}" styleClass="ui-inputtext"/>
+
+                            <p:outputLabel for="contenido" value="Contenido:" styleClass="ui-label"/>
+                            <p:inputTextarea id="contenido" value="#{notaBean.nota.contenido}" styleClass="ui-inputtext"/>
+
+                            <p:outputLabel for="categoria" value="Categoria:" styleClass="ui-label"/>
+                            <p:selectOneMenu id="categoria" value="#{notaBean.categoria}" styleClass="ui-select">
+                                <f:selectItems value="#{categoriaBean.categorias}" var="categoria" itemValue="#{categoria.id}"
+                                               itemLabel="#{categoria.nombre}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+
+
+                        <h:commandButton id="btnGuardar" value="Guardar" action="#{notaBean.guardar}"
+                                         styleClass="ui-button ui-button-primary"
+                                         update="table"/>
+                    </div>
+                </div>
+                <p:blockUI block="formProductos" trigger="btnGuardar">
+                    Cargando...
+                    <p:progressBar id="progressBar" style="margin-top: 10px" mode="indeterminate" />
+                </p:blockUI>
+            </h:form>
+
+            <div style="margin-top: 10px">
+                <p:dataTable id="table" value="#{notaBean.notas}" var="nota"
+                             styleClass="ui-datatable ui-widget"
+                             paginator="true" rows="5"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                             emptyMessage="No hay categorias registrados"
+                             rowsPerPageTemplate="5,10,15">
+                    <p:column headerText="ID">
+                        <h:outputText value="#{nota.id}" />
+                    </p:column>
+
+                    <p:column headerText="Titulo">
+                        <h:outputText value="#{nota.titulo}" />
+                    </p:column>
+
+                    <p:column headerText="Contenido">
+                        <h:outputText value="#{nota.contenido}"/>
+                    </p:column>
+
+                    <p:column headerText="Categoria">
+                        <h:outputText value="#{categoriaBean.obtenerNombre(nota.categoria.id)}"/>
+                    </p:column>
+
+                    <p:column headerText="Fecha">
+                        <h:outputText value="#{nota.fecha}"/>
+                    </p:column>
+
+                    <p:column headerText="Comentario">
+                        <h:outputText value="#{nota.comentarioAdmin}"/>
+                    </p:column>
+
+                    <p:column headerText="Calificacion">
+                        <h:outputText value="#{nota.calificacion}"/>
+                    </p:column>
+
+                    <p:column headerText="Acciones" exportable="false">
+                        <h:form>
+                            <h:commandLink action="#{categoriaBean.cargarCategoria(categoria)}"
+                                           styleClass="ui-button ui-button-warning ui-button-sm">
+                                Editar
+                            </h:commandLink>
+                            <h:commandLink action="#{categoriaBean.eliminar(categoria.id)}"
+                                           styleClass="ui-button ui-button-danger ui-button-sm ms-2"
+                                           immediate="true">
+                                Eliminar
+                            </h:commandLink>
+                        </h:form>
+                    </p:column>
+                </p:dataTable>
+            </div>
+
+        </ui:define>
+
+    </ui:decorate>
+</h:body>
+</html>

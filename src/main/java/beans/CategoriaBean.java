@@ -54,6 +54,10 @@ public class CategoriaBean implements Serializable {
         this.categoria = categoria;
     }
 
+    public String obtenerNombre(Long id) {
+        return categoriaDAO.buscarPorId(id).getNombre();
+    }
+
 
     // Getters y Setters
 

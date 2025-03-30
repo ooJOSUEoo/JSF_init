@@ -91,7 +91,8 @@ public class UsuarioBean implements Serializable {
         if (usuario != null) {
             System.out.println("Usuario encontrado: " + usuario);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuario);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/demo-1.0-SNAPSHOT/logged/main.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/demo-1.0-SNAPSHOT/logged/index.xhtml");
+            return;
         }
         FacesContext.getCurrentInstance().addMessage(
                 null,
@@ -114,7 +115,7 @@ public class UsuarioBean implements Serializable {
                 }
             }else{
                 if (!logged){
-                    context.getExternalContext().redirect("/demo-1.0-SNAPSHOT/logged/main.xhtml");
+                    context.getExternalContext().redirect("/demo-1.0-SNAPSHOT/logged/index.xhtml");
                 }
             }
 

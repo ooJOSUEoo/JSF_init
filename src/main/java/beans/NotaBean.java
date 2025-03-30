@@ -1,13 +1,20 @@
 package beans;
 
+
+import dao.CategoriaDAO;
 import dao.NotaDAO;
+import entities.Categoria;
 import entities.Nota;
+import entities.Persona;
+import entities.Usuario;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Named
@@ -19,6 +26,11 @@ public class NotaBean implements Serializable {
     @Inject
     private NotaDAO notaDAO;
 
+    @Inject
+    private CategoriaDAO categoriaDAO;
+
+    private Long categoria;
+
     @PostConstruct
     public void init() {
         notas = notaDAO.listarTodos();
@@ -27,6 +39,11 @@ public class NotaBean implements Serializable {
     public void guardar() {
         Long id = nota.getId();
         if(nota.getId() == null) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            Usuario u = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
+            nota.setFecha(new Date());
+            nota.setCategoria(categoriaDAO.buscarPorId((Long) categoria));
+            nota.setUsuario(u);
             id = notaDAO.crear(nota);
         } else {
             id = notaDAO.actualizar(nota);
@@ -71,5 +88,13 @@ public class NotaBean implements Serializable {
 
     public void setNotaDAO(NotaDAO notaDAO) {
         this.notaDAO = notaDAO;
+    }
+
+    public Long getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Long categoria) {
+        this.categoria = categoria;
     }
 }

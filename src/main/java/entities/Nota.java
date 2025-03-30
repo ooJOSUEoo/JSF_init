@@ -2,7 +2,7 @@ package entities;
 
 import jakarta.persistence.*;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -28,11 +28,11 @@ public class Nota {
     private Short calificacion;
 
     @ManyToOne
-    @JoinColumn(name = "id_persona", nullable = false)
-    private Persona persona;
+    @JoinColumn(name = "usuario", nullable = false)
+    private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "id_categoria", nullable = false)
+    @JoinColumn(name = "categoria", nullable = false)
     private Categoria categoria;
 
     // Getters y Setters
@@ -85,12 +85,12 @@ public class Nota {
         this.calificacion = calificacion;
     }
 
-    public Persona getPersona() {
-        return persona;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setPersona(Persona persona) {
-        this.persona = persona;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Categoria getCategoria() {
