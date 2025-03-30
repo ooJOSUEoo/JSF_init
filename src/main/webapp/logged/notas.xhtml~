@@ -101,7 +101,7 @@
                     </p:column>
                 </p:dataTable>
                 <p:dialog id="calificar" widgetVar="calificar" header="Calificar" closeOnEscape="true"
-                          hideEffect="explode" draggable="false">
+                          hideEffect="explode" draggable="false" onHide="#{notaBean.nota.calificacion = null}">
                     <h:form>
                         <h:outputText value="Calificar: "/>
                         <p:inputNumber minValue="1" maxValue="5" id="calificacion" value="#{notaBean.nota.calificacion}" styleClass="ui-inputtext"/>
@@ -109,7 +109,7 @@
                     </h:form>
                 </p:dialog>
                 <p:dialog id="comentar" widgetVar="comentar" header="Comentar" closeOnEscape="true"
-                          hideEffect="explode" draggable="false">
+                          hideEffect="explode" draggable="false" onHide="#{notaBean.nota.comentarioAdmin = ''}">
                     <h:form>
                         <h:outputText value="Comentar: "/>
                         <p:inputTextarea id="comentario" value="#{notaBean.nota.comentarioAdmin}" styleClass="ui-inputtext"/>

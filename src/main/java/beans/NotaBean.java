@@ -38,6 +38,14 @@ public class NotaBean implements Serializable {
 
     public void guardar() {
         Long id = nota.getId();
+
+        if (nota.getCalificacion() != null) {
+            if (nota.getCalificacion() < 1) {
+                nota.setCalificacion((short) 1);
+            } else if (nota.getCalificacion() > 5) {
+                nota.setCalificacion((short) 5);
+            }
+        }
         if(nota.getId() == null) {
             FacesContext context = FacesContext.getCurrentInstance();
             Usuario u = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
